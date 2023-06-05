@@ -8,7 +8,7 @@ public class State {
     private Long id;
     @Column
     private String name;
-    @OneToMany(mappedBy = "state", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "state", fetch = FetchType.EAGER)
     private List<Task> tasks;
     public Long getId() {
         return id;

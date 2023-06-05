@@ -1,17 +1,15 @@
-package home.nikolabojanic.sprint.model;
-import javax.persistence.*;
-import java.util.List;
-@Entity
-public class Sprint {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+package home.nikolabojanic.sprint.web.dto;
+public class SprintDto {
     private Long id;
-    @Column
     private String name;
-    @Column
     private String totalPoints;
-    @OneToMany(mappedBy = "sprint", fetch = FetchType.EAGER)
-    private List<Task> tasks;
+    public SprintDto() {
+    }
+    public SprintDto(Long id, String name, String totalPoints) {
+        this.id = id;
+        this.name = name;
+        this.totalPoints = totalPoints;
+    }
     public Long getId() {
         return id;
     }
@@ -23,12 +21,6 @@ public class Sprint {
     }
     public void setName(String name) {
         this.name = name;
-    }
-    public List<Task> getTasks() {
-        return tasks;
-    }
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
     }
     public String getTotalPoints() {
         return totalPoints;
