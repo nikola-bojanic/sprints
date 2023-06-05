@@ -25,7 +25,8 @@ public class TaskDtoToTask implements Converter<TaskDto, Task> {
         }
         if(task == null){
             return null;
-        }else{
+        }
+        else{
             task.setId(taskDto.getId());
             task.setEmployee(taskDto.getEmployee());
             task.setName(taskDto.getName());

@@ -44,6 +44,7 @@ public class ApiTaskController {
     @PreAuthorize("hasAnyRole('KORISNIK', 'ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDto> createTask(@Validated @RequestBody TaskDto dto){
+        dto.setStateId(1L);
         return new ResponseEntity<>(toDto.convert(taskService.save(toModel.convert(dto))), HttpStatus.CREATED);
     }
     @PreAuthorize("hasRole('ADMIN')")
@@ -65,6 +66,16 @@ public class ApiTaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else {
             return new ResponseEntity<>(toDto.convert(taskService.save(toModel.convert(dto))), HttpStatus.OK);
+        }
+    }
+    @PreAuthorize("hasAnyRole('KORISNIK', 'ADMIN')")
+    @PostMapping("/{id}/changeState")
+    public ResponseEntity<TaskDto> changeTaskState(@PathVariable Long id){
+        Task newState = taskService.changeState(id);
+        if(newState == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<>(toDto.convert(newState), HttpStatus.OK);
         }
     }
 }

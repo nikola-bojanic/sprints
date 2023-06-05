@@ -6,4 +6,5 @@ public interface TaskService {
     Task getOne(Long id);
     Task delete(Long id);
     Task save(Task task);
+    Task changeState(Long id);
 }
