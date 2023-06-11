@@ -28,4 +28,12 @@ public class State {
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
+    public void removeTask(Long id) {
+        for(Task task : this.tasks) {
+            if (task.getId() ==  id){
+                this.tasks.remove(task);
+                return;
+            }
+        }
+    }
 }

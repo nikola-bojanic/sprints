@@ -36,4 +36,17 @@ public class Sprint {
     public void setTotalPoints(String totalPoints) {
         this.totalPoints = totalPoints;
     }
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        this.setTotalPoints(Integer.parseInt(this.getTotalPoints()) + task.getPoints() + "");
+    }
+    public void removeTask(Long id) {
+        for(Task task : this.tasks) {
+            if (task.getId() ==  id){
+                this.tasks.remove(task);
+                this.setTotalPoints(Integer.parseInt(this.getTotalPoints()) - task.getPoints() + "");
+                return;
+            }
+        }
+    }
 }

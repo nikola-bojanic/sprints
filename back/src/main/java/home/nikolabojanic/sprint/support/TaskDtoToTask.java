@@ -19,7 +19,7 @@ public class TaskDtoToTask implements Converter<TaskDto, Task> {
     public Task convert(TaskDto taskDto) {
         Task task;
         if(taskDto.getId() != null){
-            task = taskService.getOne(taskDto.getId());
+            task = taskService.getOne(taskDto.getId()).get();
         }else{
             task = new Task();
         }

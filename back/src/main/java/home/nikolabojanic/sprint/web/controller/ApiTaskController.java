@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 @RestController
 @RequestMapping(value = "api/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ApiTaskController {
@@ -35,19 +36,19 @@ public class ApiTaskController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<TaskDto> getOne(@PathVariable Long id){
-        if(taskService.getOne(id) == null){
+        Optional<Task> existing = taskService.getOne(id);
+        if(!existing.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else{
-            return new ResponseEntity<>(toDto.convert(taskService.getOne(id)), HttpStatus.OK);
+            return new ResponseEntity<>(toDto.convert(existing.get()), HttpStatus.OK);
         }
     }
-    @PreAuthorize("hasAnyRole('KORISNIK', 'ADMIN')")
+//    @PreAuthorize("hasAnyRole('KORISNIK', 'ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDto> createTask(@Validated @RequestBody TaskDto dto){
-        dto.setStateId(1L);
-        return new ResponseEntity<>(toDto.convert(taskService.save(toModel.convert(dto))), HttpStatus.CREATED);
+        return new ResponseEntity<>(toDto.convert(taskService.save(dto)), HttpStatus.CREATED);
     }
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<TaskDto> deleteTask(@PathVariable Long id){
         Task deleted = taskService.delete(id);
@@ -57,15 +58,17 @@ public class ApiTaskController {
             return new ResponseEntity<>(toDto.convert(deleted), HttpStatus.NO_CONTENT);
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDto> editTask(@PathVariable Long id, @Validated @RequestBody TaskDto dto){
         if(id != dto.getId()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (toModel.convert(dto) == null) {
+        }
+        Optional<Task> existing = taskService.getOne(id);
+        if(!existing.isPresent()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else {
-            return new ResponseEntity<>(toDto.convert(taskService.save(toModel.convert(dto))), HttpStatus.OK);
+            return new ResponseEntity<>(toDto.convert(taskService.save(dto)), HttpStatus.OK);
         }
     }
     @PreAuthorize("hasAnyRole('KORISNIK', 'ADMIN')")
