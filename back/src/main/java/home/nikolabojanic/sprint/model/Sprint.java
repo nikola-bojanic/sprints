@@ -10,7 +10,7 @@ public class Sprint {
     private String name;
     @Column
     private String totalPoints;
-    @OneToMany(mappedBy = "sprint", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sprint", fetch = FetchType.EAGER)
     private List<Task> tasks;
     public Long getId() {
         return id;
@@ -35,5 +35,18 @@ public class Sprint {
     }
     public void setTotalPoints(String totalPoints) {
         this.totalPoints = totalPoints;
+    }
+    public void addTask(Task task) {
+        this.tasks.add(task);
+        this.setTotalPoints(Integer.parseInt(this.getTotalPoints()) + task.getPoints() + "");
+    }
+    public void removeTask(Long id) {
+        for(Task task : this.tasks) {
+            if (task.getId() ==  id){
+                this.tasks.remove(task);
+                this.setTotalPoints(Integer.parseInt(this.getTotalPoints()) - task.getPoints() + "");
+                return;
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ public class State {
     private Long id;
     @Column
     private String name;
-    @OneToMany(mappedBy = "state", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "state", fetch = FetchType.EAGER)
     private List<Task> tasks;
     public Long getId() {
         return id;
@@ -27,5 +27,13 @@ public class State {
     }
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+    public void removeTask(Long id) {
+        for(Task task : this.tasks) {
+            if (task.getId() ==  id){
+                this.tasks.remove(task);
+                return;
+            }
+        }
     }
 }
