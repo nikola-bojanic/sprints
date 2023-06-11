@@ -28,7 +28,7 @@ public class ApiTaskController {
     public ResponseEntity<List<TaskDto>> getTasks(@RequestParam(required = false) String taskName,
                                                   @RequestParam(required = false) Long sprintId,
                                                   @RequestParam(defaultValue = "0") int pageNo,
-                                                  @RequestParam(defaultValue = "5") int pageSize){
+                                                  @RequestParam(defaultValue = "3") int pageSize){
         HttpHeaders headers = new HttpHeaders();
         Page<Task> page = taskService.getAll(taskName, sprintId, pageNo, pageSize);
         headers.add("Total-Pages", Integer.toString(page.getTotalPages()));
@@ -43,12 +43,12 @@ public class ApiTaskController {
             return new ResponseEntity<>(toDto.convert(existing.get()), HttpStatus.OK);
         }
     }
-//    @PreAuthorize("hasAnyRole('KORISNIK', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('KORISNIK', 'ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDto> createTask(@Validated @RequestBody TaskDto dto){
         return new ResponseEntity<>(toDto.convert(taskService.save(dto)), HttpStatus.CREATED);
     }
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<TaskDto> deleteTask(@PathVariable Long id){
         Task deleted = taskService.delete(id);
@@ -58,7 +58,7 @@ public class ApiTaskController {
             return new ResponseEntity<>(toDto.convert(deleted), HttpStatus.NO_CONTENT);
         }
     }
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskDto> editTask(@PathVariable Long id, @Validated @RequestBody TaskDto dto){
         if(id != dto.getId()){

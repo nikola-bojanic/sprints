@@ -59,9 +59,7 @@ public class JpaTaskService implements TaskService {
     public Task save(TaskDto dto) {
         Task task = null;
         if(dto.getId() == null){
-            task = toModel.convert(dto);
-            State state = stateRepository.getOne(1L);
-            task.setState(state);
+            dto.setStateId(1L);
         }
         if(dto.getId() != null){
             Optional<Task> existing = getOne(dto.getId());
